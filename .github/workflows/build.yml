@@ -1,0 +1,33 @@
+name: Build Windows EXE
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install numpy pyinstaller
+
+    - name: Build EXE
+      run: |
+        pyinstaller --onefile --windowed sink_optimizer_gui-v1.py
+
+    - name: Upload EXE
+      uses: actions/upload-artifact@v4
+      with:
+        name: sink-optimizer-exe
+        path: dist/sink_optimizer_gui-v1.exe
